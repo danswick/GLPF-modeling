@@ -119,11 +119,28 @@ TBD
 
 
 #### <i class="icon-check"></i> Watershed Delineation
-1. Flow direciton and accumulation. In ArcSWAT, this step can take an extremely long time to process. It builds out a set of rasters, which unfortunately can't be referenced if the session is restarted. This means you should have all of your parameters gathered ahead of time so you can complete the Automatic Watershed Delineation process in one shot. FDA files: 
+1. **DEM Setup**
+    - **Mask.** ArcSWAT requires a raster for the mask, despite the guidance. You can also manually delineate the boundary of the mask (which is weird, because the manual delineation isn't a raster). 
+    - **Burn In.** ArcSWAT turns flowlines into a raster dataset, which "burns in" the DEM to ensure it captures accurate flowlines. We used the `NHD flowline` file for burn-in. Immediate results appear to be random static at default scale, but zooming in reveals the full dataset. 
+2. **Stream Definition**
+    - **DEM-based vs Pre-Defined.**
+    - **Flow direciton and accumulation.** In ArcSWAT, this step can take an extremely long time to process. It builds out a set of rasters, which unfortunately can't be referenced if the session is restarted. This means you should have all of your parameters gathered ahead of time so you can complete the Automatic Watershed Delineation process in one shot. 
+    - **Area.** Area of 80 (~35 ha) acres in watershed delineator
+        - It appears you can only set watershed delineation cell size         once per project. need new project to change
+    
+    ArcSWAT *also* doesn't seem able rebuilt FDA after it has already been   done, preventing the next steps in the Watershed Delineation wizard. FDA files: 
 > * Results stored under `~/[project_folder]/Watershed/Grid/`
-* Includes `sourcedem`, `targetdem`, `filedem`, `flowacc`, `flowdir`
+>   * Includes `sourcedem`, `targetdem`, `filedem`, `flowacc`, `flowdir`
+3. **Outlet and Inlet Definition.** 
+    - **Subbasin outlet, inlet of draining watershed, point source input...**
+    - **Add points source to each subbasin**
+        - **Edit manually** 
+4. **Watershed outlets selection and definition**
+    - Whole watershed outlets 
+    - Delineate watershed 
+5. **Calculation of subbasin parameters.**
 
-
+ 
 
 #### <i class="icon-check"></i> HRU's and You
 #### <i class="icon-check"></i> Weather
