@@ -53,3 +53,8 @@ _ Working with the Idaho National Lab of the US-DOE to link with their LEAF fram
 	- It doesn't. Monthly averages are the only option. 
 - State-specific parameters? 
 	- Use tool as it is. If weighting factors are not sufficient, contact your state office. 
+	
+###Next Steps
+- Does WQIag and its ranking emphasis fit in with the West Branch work? Does it compliment the P-index in any way or could it help us prioritize fields? 
+- The parameter entry system is proprietary and might require a significant amount of translation work. 
+- Harbans' role with NTT further underscores our need to better understand NTT and Ali's role in all of this. 
