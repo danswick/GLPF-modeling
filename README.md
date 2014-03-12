@@ -251,7 +251,12 @@ Click `setup SWAT Run` to write your parameters, then click `Run SWAT`.
 >- Tried with just "soil nutrient" checked - same error
 >- As per [this help article](https://groups.google.com/forum/#!topic/arcswat/mbuOOhVKG2s) changed `channel routing` to "Muskingum." - Same error. 
 >- Checked SNO50COV value as in [this thread](https://groups.google.com/forum/#!msg/swat-cup/jsr2KGhVSW4/G4xhQRHqlPkJ). Was within bounds.
->
+>- As in above article, uninstalled ArcSWAT and installed latetst version. Run with parameters above successful! 
+
+**Run SWATCheck** 
+Running the built-in SWAT Check application is used to check for errors and, to some extent, visualize the outputs from the model run. 
+
+> First attempt at running swat check resulted in a system out of memory error. 
 
 
 
