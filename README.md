@@ -141,10 +141,121 @@ TBD
 5. **Calculation of subbasin parameters.**
 
  
+#### <i class="icon-check"></i> Land Use/Soils/Slope Definition
+**Land Use Data**
+Land use data must be projected and must have the same spatial reference as the other layers in the project. Ensure SRS is the same before attempting this step with NLCD data (or whatever is being used). 
+
+>For this project, I clipped the national NLCD dataset to the extent of our HUC8, then changed the SRS to NAD83, UTM Zone 16N (meters). 
+
+Once you've pointed SWAT to the Land Use `grid` file, SWAT will rebuild it into the project database and create a new file called "LandUse1." Choose `VALUE` under the "Choose Grid Field" drop-down and click "OK." Click the "LookUp Table button and choose `NLCD 2001/2006 Table" and click "OK." This should populate the "LandUseSwat" column with class values. Once this has been done, click the "Reclassify" button. This will generate yet another grid file in your project database. In the case of this project, the resulting layer was named "SwatLandUseClass(LandUse2)."
+
+**Soil Data**
+*Attempt with SSURGO*
+Trying to load gridded SSRUGO straight from the geodatabase resulted in the error:
+>You have to choose datasets of the same type
+
+Download ARCSWAT SSURGO database: 
+
+
+*Attempt with STATSGO rather than SSURGO*
+Counties for HUC8: Fond Du Lac, Sheboygan, Ozaukee, Washington, Dodge, Waukesha, Milwaukee. 
+Downloaded from geospatial data gateway for above counties. 
+1. Load STATSGO data (have to select all filters from "show of type" dropdown)
+2. Once loaded, select MUID radio button
+3. Choose "arcswat statsgo" radio button from "Soil database options"
+4. Choose "stmuid"
+5. Click "lookup table" and navigate to the ArcSWAT soils database in the ArcSWAT program folder
+6. Invalid table dimensions
+7. .NET implosion 
+    > When loading the STATGSO layer, I get:
+    > - Error Call Stack Sequence:
+            createcoutputfilesdbate LUGridShp.vb Line: 3364
+    > - Error Number: 5
+    > - Description: Value does not fall within the expected range
+    >
+    > If I click through the errors and select "value" under "choose grid field," I get the error "Argument 'Expression' is not a valid value/ 
+
+*Attempt with build-in ArcSWAT soils*
+1. Soils layer needs to be reprojected (see link under soil resources below)
+2. Built-in layer looks like it's missing WI, but this is just a rendering artifact. 
+3. Once soils have been reprojected and saved with the original file name within the ArcSWAT_US_soils database, they can easily be loaded into the wizard. HOORAY! 
+
+*Soil Resources*
+>- [SSURGO class relationships](https://groups.google.com/forum/#!topic/ArcSWAT/ys6I3o4TgSQ)
+>- [STATSGO vs SSURGO, troubleshooting](https://groups.google.com/forum/#!searchin/ArcSWAT/SSURGO/arcswat/pIry3MoEJKs/F6hFPGy9BgoJ)
+>- [Integration of SSURGO maps and soil parameters within a geographic information system and non point source pollution model system](http://naldc.nal.usda.gov/download/15136/PDF)
+>- [Better accuracy, higher computational load using SSURGO](https://groups.google.com/forum/#!searchin/ArcSWAT/SSURGO/arcswat/uTk1crGUSo0/vM0KdS5gfiEJ)
+>- [This solution would be neat if the ArcSWAT soils DB raster included Wisconsin. But it doesn't](https://groups.google.com/forum/#!searchin/ArcSWAT/statsgo/arcswat/33PJXzjwqNE/Tai6uanl-KYJ)   
+
+#### <i class="icon-check"></i> Slope
+1. in the dialog box, look at watershed slope stats. Unsure of the best approach to defining classes, but I just went with 2 classes, 0-the mean and >mean. 
 
 #### <i class="icon-check"></i> HRU's and You
+- Under "HRU Definition," select "multiple HRU's" 
+- Threshold should be %
+- We need to develop a better methodology for setting thresholds. I just went with the BASINS guidance of:
+    - Land use: 15%
+    - Soil class: 10%
+    - Slope class: 10% 
+- Check "write HRU Report"
+- Land Use Revinement tab
+    - We did not get into this area
+    
+>*Resources* 
+- [TetraTech Configuration, Calibration and Validation Report](http://www.epa.gov/region1/eco/tmdl/pdfs/vt/SWATModelConfigurationCalibrationValidation.pdf)
+
+
+
 #### <i class="icon-check"></i> Weather
+The inputs for weather can either be loaded from the SWAT2012 database or user-defined. For the purposes of expedience, the defaul option of `WGEN_US_COOP_1980_2010` was chosen under the "Weather Generator Data" tab. The other five tabs, which are optional, were left as default.  
+> It is important to note that the default weather tables only represent data through 2010. 
+
+When the default is selected, clicking "OK" will prompt ArcSWAT to calculate distance to weather stations. When this completes, a prompt will appear. Click "OK," then, somehwat confusingling, close out of the weather dialog. The option to write SWAT input tables should now be available.
+
+**Using user-defined weather data**
+This section will be completed should early model results suggest that the default data does not provide great enough precision. 
+
 #### <i class="icon-check"></i> Running the Model
+**Write SWAT Input Tables**
+Once all of the above steps have been completed, the option to write SWAT input tables will be available. 
+
+1. When the dialog is opened, a list of tables is available. There are some circumstances that might require writing tables one at a time, but most users should click the `Select All` button, then click the `Create Tables` button.  
+    - This will run table-writing scripts for all of the tables. 
+    - The first prompt will ask to use weather database to calculate heat units to (plant) maturity. This is only valid in the northern hemisphere. Most should click `Yes`. 
+    - When the fig.fig file is written, you are asked, in sequence, if you would like to re-write 'pp' (point source), 'ppi' (inlet), and 'res' (reservoir). Users who have loaded in point source, inlet or reservoir data during Watershed Delineation should **not** click `Yes`. Otherwise, users can click `No`. 
+
+>Error occured while writing .sol, but accidentally clicked away before being able to copy it down. The "do you want to re-write pp, pip, res prompt never appeared. The only text I can remember is "no error code available" and that it was a .NET error. Canceled the operation and re-opened ArcMap, but the option to write input tables had been grayed out. Rebooted and the option to write input tables was available and, upon re-starting the process, I got the prompt to re-write pp, pip and res. Seems to be yet another .NET problem only solvable via reboot. 
+
+
+**Setup and Run SWAT Model Simulation**
+This section describes the actual running of the model. The inputs are described below. 
+
+- Period of simulation 
+    - The default runs from 1901 to 2100. I set it to do a 30-year run (1/1/1990 - 1/1/2020)
+- Rainfall sub-daily timestep 
+    - This option was not available 
+- Rainfall distribution 
+    - Default of "skewed normal." See I/O documentation 
+- SWAT.exe version
+    - Allows to choose 32- or 64-bit versions, debug or release. Debug versions have more verbose error reporting and release runs considerably faster. 
+- Printout settings 
+    - Lets the user choose which parameters are printed into the results and the frequency (daily, monthly, yearly)
+    - Chose Monthly and soil nutrient, water quality output, route headwaters, print snow, print soil storage and limit HRU output (default)
+- Set CPU Affinity
+
+Click `setup SWAT Run` to write your parameters, then click `Run SWAT`. 
+>- With above parameters, got a `error (72): floating overflow` upon processing year 2. 
+>- Changed timeframe from 1/1/2000 - 1/1/2015: same error.
+>- Changed to 64-bit release - same error
+>- Removed route headwaters - same error
+>- Tried with just "soil nutrient" checked - same error
+>- As per [this help article](https://groups.google.com/forum/#!topic/arcswat/mbuOOhVKG2s) changed `channel routing` to "Muskingum." - Same error. 
+>- Checked SNO50COV value as in [this thread](https://groups.google.com/forum/#!msg/swat-cup/jsr2KGhVSW4/G4xhQRHqlPkJ). Was within bounds.
+>
+
+
+
+    
 #### <i class="icon-upload"></i> Model Outputs
 #### <i class="icon-help-circled"></i> ArcSWAT Idiosyncrasies 
 
@@ -163,5 +274,6 @@ TBD
      10. What are other soil options
 
  
+> Gist available here - https://stackedit.io/viewer#!provider=gist&gistId=2e7e04eb153a78d0ab37&filename=SWAT_model_notes 
 
 > Fontello icon set - http://benweet.github.io/stackedit/res/libs/fontello/demo.html 
