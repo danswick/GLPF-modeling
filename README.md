@@ -142,6 +142,7 @@ TBD
 
  
 #### <i class="icon-check"></i> Land Use/Soils/Slope Definition
+
 **Land Use Data**
 Land use data must be projected and must have the same spatial reference as the other layers in the project. Ensure SRS is the same before attempting this step with NLCD data (or whatever is being used). 
 
@@ -175,7 +176,7 @@ Downloaded from geospatial data gateway for above counties.
     >
     > If I click through the errors and select "value" under "choose grid field," I get the error "Argument 'Expression' is not a valid value/ 
 
-*Attempt with build-in ArcSWAT soils*
+*Attempt with built-in ArcSWAT soils*
 1. Soils layer needs to be reprojected (see link under soil resources below)
 2. Built-in layer looks like it's missing WI, but this is just a rendering artifact. 
 3. Once soils have been reprojected and saved with the original file name within the ArcSWAT_US_soils database, they can easily be loaded into the wizard. HOORAY! 
@@ -282,3 +283,5 @@ Running the built-in SWAT Check application is used to check for errors and, to 
 > Gist available here - https://stackedit.io/viewer#!provider=gist&gistId=2e7e04eb153a78d0ab37&filename=SWAT_model_notes 
 
 > Fontello icon set - http://benweet.github.io/stackedit/res/libs/fontello/demo.html 
+
+
