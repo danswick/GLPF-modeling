@@ -151,6 +151,7 @@ Land use data must be projected and must have the same spatial reference as the 
 Once you've pointed SWAT to the Land Use `grid` file, SWAT will rebuild it into the project database and create a new file called "LandUse1." Choose `VALUE` under the "Choose Grid Field" drop-down and click "OK." Click the "LookUp Table button and choose `NLCD 2001/2006 Table" and click "OK." This should populate the "LandUseSwat" column with class values. Once this has been done, click the "Reclassify" button. This will generate yet another grid file in your project database. In the case of this project, the resulting layer was named "SwatLandUseClass(LandUse2)."
 
 **Soil Data**
+
 *Attempt with SSURGO*
 Trying to load gridded SSRUGO straight from the geodatabase resulted in the error:
 >You have to choose datasets of the same type
@@ -253,6 +254,9 @@ Click `setup SWAT Run` to write your parameters, then click `Run SWAT`.
 >- As per [this help article](https://groups.google.com/forum/#!topic/arcswat/mbuOOhVKG2s) changed `channel routing` to "Muskingum." - Same error. 
 >- Checked SNO50COV value as in [this thread](https://groups.google.com/forum/#!msg/swat-cup/jsr2KGhVSW4/G4xhQRHqlPkJ). Was within bounds.
 >- As in above article, uninstalled ArcSWAT and installed latetst version. Run with parameters above successful! 
+
+**Import files to database**
+Just checking all of the files and clicking "import files to database" won't work. ArcSWAT throws the error `...not set to an instance of a string. Parameter: s`. Instead, go through, one by one, attempting to import files. There seems to be some kind of preferred order to importing. 
 
 **Run SWATCheck** 
 Running the built-in SWAT Check application is used to check for errors and, to some extent, visualize the outputs from the model run. 
