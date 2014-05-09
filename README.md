@@ -288,4 +288,6 @@ Running the built-in SWAT Check application is used to check for errors and, to 
 
 > Fontello icon set - http://benweet.github.io/stackedit/res/libs/fontello/demo.html 
 
+> Further notes and issues stored here - https://github.com/danswick/GLPF-modeling/
+
 
